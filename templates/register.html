@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register | AI Surveillance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">AI Surveillance</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+    </div>
+</nav>
+
+<!-- REGISTER CONTAINER -->
+<section class="auth-section">
+    <div class="auth-card">
+        <h2>Create Account</h2>
+        <p class="auth-subtitle">Register to access the AI surveillance platform</p>
+
+        <form method="POST">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" placeholder="Create a password" required>
+            </div>
+
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" placeholder="Confirm password" required>
+            </div>
+
+            <button type="submit" class="btn-primary btn-full">Register</button>
+        </form>
+
+        <p class="auth-footer">
+            Already have an account?
+            <a href="/login">Login here</a>
+        </p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 | AI-Based Surveillance System</p>
+</footer>
+
+</body>
+</html>
