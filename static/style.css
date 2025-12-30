@@ -229,3 +229,108 @@ footer {
 .auth-footer a:hover {
     text-decoration: underline;
 }
+
+/* NAV LINKS FIX */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* USER DROPDOWN */
+.user-dropdown {
+    position: relative;
+}
+
+.user-trigger {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.user-trigger span {
+    margin-left: 8px;
+}
+
+.user-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #fff;
+    padding: 2px;
+}
+
+/* DROPDOWN MENU */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 38px;
+    background-color: #fff;
+    min-width: 150px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f4ff;
+}
+
+/* SHOW DROPDOWN */
+.user-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
+/* ================= ADMIN THEME ================= */
+
+.admin-navbar {
+    background: linear-gradient(to right, #1b1b1b, #2c2c2c);
+}
+
+.admin-hero {
+    background: linear-gradient(to right, #2c2c2c, #1b1b1b);
+}
+
+.admin-hero h1,
+.admin-hero h2,
+.admin-hero p {
+    color: #fff;
+}
+
+.btn-admin {
+    background-color: #ff6b35;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.btn-admin-outline {
+    border: 2px solid #ff6b35;
+    color: #ff6b35;
+    padding: 12px 22px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.admin-footer {
+    background-color: #1b1b1b;
+    color: #fff;
+}
