@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Home | AI Surveillance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">AI Surveillance</div>
+
+        <div class="nav-links">
+            <a href="/userhome">Dashboard</a>
+
+            <div class="user-dropdown">
+                <div class="user-trigger">
+                    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
+                    <span>{{ session["user"][1] }}</span>
+                </div>
+
+                <div class="dropdown-menu">
+                    <a href="/profile">Profile</a>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to AI Surveillance</h1>
+            <h2>Human Trafficking & Missing Person Detection</h2>
+            <p>
+                You are now logged into the AI-powered surveillance platform.
+                Use the tools below to assist in detecting suspects and identifying
+                missing persons using advanced face recognition technology.
+            </p>
+            <div class="hero-buttons">
+                <a href="/upload" class="btn-primary">Upload Image</a>
+                <a href="/camera" class="btn-secondary">Live Camera</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1581091215367-59ab6b98d4f1" alt="AI Surveillance">
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features">
+        <h2>Available Capabilities</h2>
+        <div class="feature-grid">
+
+            <div class="feature-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png">
+                <h3>Face Detection</h3>
+                <p>
+                    Detect human faces from uploaded images or video frames
+                    using intelligent vision models.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/2920/2920277.png">
+                <h3>Face Matching</h3>
+                <p>
+                    Compare detected faces with missing persons database
+                    to identify possible matches.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/4341/4341139.png">
+                <h3>Match Confidence</h3>
+                <p>
+                    Get similarity scores and confidence levels for
+                    each identified match.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png">
+                <h3>Alert System</h3>
+                <p>
+                    Generate alerts for authorities when a
+                    high-confidence match is detected.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- APPLICATIONS -->
+    <section class="applications">
+        <h2>Monitoring Coverage</h2>
+        <p>
+            The system supports surveillance and investigation across
+            multiple public and secure locations.
+        </p>
+
+        <div class="app-grid">
+            <div class="app-box">Airports</div>
+            <div class="app-box">Railway Stations</div>
+            <div class="app-box">Bus Terminals</div>
+            <div class="app-box">Border Checkpoints</div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 | AI-Based Surveillance System</p>
+        <p>Human Trafficking & Missing Person Detection</p>
+    </footer>
+
+</body>
+
+</html>
