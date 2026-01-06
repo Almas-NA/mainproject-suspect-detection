@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Report Missing Person</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">AI Surveillance</div>
+
+        <div class="nav-links">
+            <a href="/userhome">Dashboard</a>
+
+            <!-- MISSING PERSON MENU -->
+            <div class="user-dropdown">
+                <div class="user-trigger">
+                    <span>Missing Persons</span>
+                </div>
+
+                <div class="dropdown-menu">
+                    <a href="/addmissing">Report Missing Person</a>
+                    <a href="/listmissing">My Reports</a>
+                </div>
+            </div>
+
+            <!-- USER DROPDOWN -->
+            <div class="user-dropdown">
+                <div class="user-trigger">
+                    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
+                    <span>{{ session["user"][1] }}</span>
+                </div>
+
+                <div class="dropdown-menu">
+                    <a href="/profile">Profile</a>
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <section class="auth-section">
+        <div class="auth-card">
+            <h2>Report Missing Person</h2>
+
+            <form method="POST" action="/addmissingaction" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="full_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" name="age">
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender">
+                        <option value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Last Seen Location</label>
+                    <input type="text" name="last_seen_location">
+                </div>
+
+                <div class="form-group">
+                    <label>Search Start Date</label>
+                    <input type="date" name="start_date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Search End Date</label>
+                    <input type="date" name="end_date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Photo</label>
+                    <input type="file" name="photo" accept="image/*" required>
+                </div>
+
+                <button type="submit" class="btn-primary btn-full">
+                    Submit Request
+                </button>
+
+            </form>
+        </div>
+    </section>
+
+</body>
+
+</html>

@@ -7,13 +7,25 @@
 </head>
 <body>
 
-<!-- ADMIN NAVBAR -->
 <nav class="navbar admin-navbar">
     <div class="logo">AI Surveillance | Admin</div>
 
     <div class="nav-links">
         <a href="/adminhome">Dashboard</a>
 
+        <!-- CCTV DROPDOWN -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Manage CCTV Inputs</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <a href="/uploadcctv">Add Footage</a>
+                <a href="/viewcctv">View Uploads</a>
+            </div>
+        </div>
+
+        <!-- ADMIN USER DROPDOWN -->
         <div class="user-dropdown">
             <div class="user-trigger">
                 <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
@@ -29,6 +41,7 @@
     </div>
 </nav>
 
+
 <!-- HERO -->
 <section class="hero admin-hero">
     <div class="hero-content">
@@ -40,7 +53,7 @@
         </p>
 
         <div class="hero-buttons">
-            <a href="#" class="btn-admin">Manage Users</a>
+            <a href="" class="btn-admin">Manage Users</a>
             <a href="#" class="btn-admin-outline">View Alerts</a>
         </div>
     </div>

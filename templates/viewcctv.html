@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View CCTV Footages | Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- ADMIN NAVBAR -->
+<nav class="navbar admin-navbar">
+    <div class="logo">AI Surveillance | Admin</div>
+
+    <div class="nav-links">
+        <a href="/adminhome">Dashboard</a>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>CCTV Management</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/uploadcctv">Add CCTV Footage</a>
+                <a href="/viewcctv">View Uploads</a>
+            </div>
+        </div>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                     class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="features">
+    <h2>Uploaded CCTV Footages</h2>
+
+    <div style="overflow-x:auto;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>CCTV ID</th>
+                    <th>Video ID</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in videos %}
+                <tr>
+                    <td>{{ v[1] }}</td>
+                    <td>{{ v[2] }}</td>
+                    <td>{{ v[4] }}</td>
+                    <td>{{ v[5] }}</td>
+                    <td>
+                        <button class="btn-admin-small"
+                                onclick="openModal('{{ v[3] }}')">
+                            View
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- VIDEO MODAL -->
+<div id="videoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <video id="modalVideo" controls width="100%">
+            <source src="" type="video/mp4">
+            Your browser does not support video playback.
+        </video>
+    </div>
+</div>
+
+<!-- MODAL SCRIPT -->
+<script>
+    function openModal(videoFile) {
+        const modal = document.getElementById("videoModal");
+        const video = document.getElementById("modalVideo");
+        video.src = "/static/uploads/cctv_videos/" + videoFile;
+        modal.style.display = "block";
+        video.play();
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("videoModal");
+        const video = document.getElementById("modalVideo");
+        video.pause();
+        video.src = "";
+        modal.style.display = "none";
+    }
+</script>
+
+</body>
+</html>

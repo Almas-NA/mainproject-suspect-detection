@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan CCTV | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">AI Surveillance</div>
+    <div class="nav-links">
+        <a href="/userhome">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<section class="auth-section">
+    <div class="auth-card" style="max-width:800px;">
+        <h2>CCTV Scan Preparation</h2>
+
+        <p><strong>Missing Person:</strong> {{ missing_name }}</p>
+
+        <img src="/static/uploads/missing_persons/{{ photo_file }}"
+             style="width:200px; border-radius:10px; margin:20px 0;">
+
+        <p><strong>Videos to Scan:</strong> {{ video_count }}</p>
+
+        <ul>
+            {% for v in videos %}
+            <li>
+                CCTV {{ v[1] }} | Video {{ v[2] }} | {{ v[4] }}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <p style="margin-top:20px; color:#666;">
+            Face recognition processing will start from here.
+        </p>
+    </div>
+</section>
+
+</body>
+</html>

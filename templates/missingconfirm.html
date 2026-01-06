@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Missing Person | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">AI Surveillance</div>
+    <div class="nav-links">
+        <a href="/userhome">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<section class="auth-section">
+    <div class="confirm-wrapper">
+
+        <!-- HEADER -->
+        <div class="confirm-header">
+            <h1>Confirm Missing Person</h1>
+            <p>Please review the details carefully before initiating CCTV scan</p>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="confirm-layout">
+
+            <!-- LEFT PANEL -->
+            <div class="confirm-left">
+                <img src="/static/uploads/missing_persons/{{ mp[6] }}" alt="Missing Person">
+
+                <div class="identity-card">
+                    <h3>{{ mp[0] }}</h3>
+                    <p>{{ mp[2] }} • {{ mp[1] }} years</p>
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL -->
+            <div class="confirm-right">
+
+                <!-- DETAILS CARD -->
+                <div class="info-card">
+                    <h3>Last Known Details</h3>
+
+                    <div class="info-row">
+                        <span>Last Seen Location</span>
+                        <strong>{{ mp[3] }}</strong>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Search Start Date</span>
+                        <strong>{{ mp[4] }}</strong>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Search End Date</span>
+                        <strong>{{ mp[5] }}</strong>
+                    </div>
+                </div>
+
+                <!-- CCTV CARD -->
+                <div class="info-card highlight-card">
+                    <h3>CCTV Footage Availability</h3>
+
+                    <div class="video-count-big">
+                        {{ video_count }}
+                    </div>
+                    <p class="video-text">
+                        CCTV video(s) found for the selected date range
+                    </p>
+
+                    {% if video_count > 0 %}
+                    <a href="/scanvideos/{{ mid }}" class="btn-scan">
+                        🔍 Scan Now
+                    </a>
+                    {% else %}
+                    <p class="no-video">
+                        No CCTV videos available for this period.
+                    </p>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>
