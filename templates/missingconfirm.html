@@ -6,6 +6,7 @@
 </head>
 <body>
 
+<!-- NAVBAR -->
 <nav class="navbar">
     <div class="logo">AI Surveillance</div>
     <div class="nav-links">
@@ -14,6 +15,7 @@
     </div>
 </nav>
 
+<!-- CONFIRM SECTION -->
 <section class="auth-section">
     <div class="confirm-wrapper">
 
@@ -28,11 +30,19 @@
 
             <!-- LEFT PANEL -->
             <div class="confirm-left">
-                <img src="/static/uploads/missing_persons/{{ mp[6] }}" alt="Missing Person">
+
+                {% if mp.image_path %}
+                <img src="/static/uploads/missing_persons/{{ mp.image_path }}"
+                     alt="Missing Person">
+                {% else %}
+                <div class="no-image-box">
+                    No Image Available
+                </div>
+                {% endif %}
 
                 <div class="identity-card">
-                    <h3>{{ mp[0] }}</h3>
-                    <p>{{ mp[2] }} • {{ mp[1] }} years</p>
+                    <h3>{{ mp.full_name }}</h3>
+                    <p>{{ mp.gender }} • {{ mp.age }} years</p>
                 </div>
             </div>
 
@@ -45,17 +55,17 @@
 
                     <div class="info-row">
                         <span>Last Seen Location</span>
-                        <strong>{{ mp[3] }}</strong>
+                        <strong>{{ mp.last_seen_location }}</strong>
                     </div>
 
                     <div class="info-row">
                         <span>Search Start Date</span>
-                        <strong>{{ mp[4] }}</strong>
+                        <strong>{{ mp.start_date }}</strong>
                     </div>
 
                     <div class="info-row">
                         <span>Search End Date</span>
-                        <strong>{{ mp[5] }}</strong>
+                        <strong>{{ mp.end_date }}</strong>
                     </div>
                 </div>
 
@@ -71,7 +81,7 @@
                     </p>
 
                     {% if video_count > 0 %}
-                    <a href="/scanvideos/{{ mid }}" class="btn-scan">
+                    <a href="/scancctv/{{ mid }}" class="btn-scan">
                         🔍 Scan Now
                     </a>
                     {% else %}

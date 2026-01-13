@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Missing Person Reports | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">AI Surveillance</div>
+    <div class="nav-links">
+        <a href="/userhome">Dashboard</a>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Missing Persons</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/addmissing">Report Missing Person</a>
+                <a href="/listmissing">My Reports</a>
+            </div>
+        </div>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENT -->
+<section class="auth-section">
+    <div class="list-wrapper">
+
+        <h2 class="list-title">My Missing Person Reports</h2>
+
+        {% if records %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Last Seen</th>
+                    <th>Date Range</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ r[1] }}</td>
+                    <td>{{ r[2] }}</td>
+                    <td>{{ r[3] }}</td>
+                    <td>{{ r[4] }}</td>
+                    <td>
+                        {{ r[5] }} <br> to <br> {{ r[6] }}
+                    </td>
+                    <td>
+                        <a href="/missingconfirm/{{ r[0] }}" class="btn-view">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-data">No missing person reports found.</p>
+        {% endif %}
+
+    </div>
+</section>
+
+</body>
+</html>
