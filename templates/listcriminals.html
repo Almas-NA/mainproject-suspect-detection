@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Criminal Database | Admin | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- ADMIN NAVBAR -->
+<nav class="navbar admin-navbar">
+    <div class="logo">AI Surveillance | Admin</div>
+
+    <div class="nav-links">
+        <a href="/adminhome">Dashboard</a>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Criminal Database</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/addcriminal">Add Criminal</a>
+                <a href="/listcriminals">View Criminals</a>
+            </div>
+        </div>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/adminprofile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENT -->
+<section class="auth-section">
+    <div class="list-wrapper">
+
+        <h2 class="list-title">Criminal Records</h2>
+
+        {% if criminals %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Alias</th>
+                    <th>Crime Type</th>
+                    <th>Last Known Location</th>
+                    <th>Status</th>
+                    <th>Faces</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in criminals %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ c[1] }}</td>
+                    <td>{{ c[2] or "-" }}</td>
+                    <td>{{ c[3] }}</td>
+                    <td>{{ c[4] }}</td>
+                    <td>
+                        {% if c[5] == 1 %}
+                        <span class="status active">Active</span>
+                        {% else %}
+                        <span class="status inactive">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn-view" onclick="openModal({{ c[0] }})">
+                            View Faces
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- MODAL -->
+                <div class="modal" id="modal-{{ c[0] }}">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal({{ c[0] }})">&times;</span>
+                        <h3>Face Images</h3>
+
+                        <div class="face-grid">
+                            {% for i in range(1,11) %}
+                            <img src="/static/criminals/{{ c[0] }}/{{ i }}.jpg"
+                                 onerror="this.style.display='none'">
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-data">No criminal records found.</p>
+        {% endif %}
+
+    </div>
+</section>
+
+<!-- SIMPLE MODAL SCRIPT -->
+<script>
+function openModal(id) {
+    document.getElementById("modal-" + id).style.display = "flex";
+}
+function closeModal(id) {
+    document.getElementById("modal-" + id).style.display = "none";
+}
+</script>
+
+</body>
+</html>

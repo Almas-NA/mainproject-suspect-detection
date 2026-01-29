@@ -9,39 +9,51 @@
 
 <body>
 
-    <nav class="navbar">
-        <div class="logo">AI Surveillance</div>
+  <nav class="navbar">
+    <div class="logo">AI Surveillance</div>
 
-        <div class="nav-links">
-            <a href="/userhome">Dashboard</a>
+    <div class="nav-links">
+        <a href="/userhome">Dashboard</a>
 
-            <!-- MISSING PERSON MENU -->
-            <div class="user-dropdown">
-                <div class="user-trigger">
-                    <span>Missing Persons</span>
-                </div>
-
-                <div class="dropdown-menu">
-                    <a href="/addmissing">Report Missing Person</a>
-                    <a href="/listmissing">My Reports</a> 
-                    <a href="/myscan">My Scans</a>
-                </div>
+        <!-- MISSING PERSON MENU -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Missing Persons</span>
             </div>
 
-            <!-- USER DROPDOWN -->
-            <div class="user-dropdown">
-                <div class="user-trigger">
-                    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
-                    <span>{{ session["user"][1] }}</span>
-                </div>
-
-                <div class="dropdown-menu">
-                    <a href="/profile">Profile</a>
-                    <a href="/logout">Logout</a>
-                </div>
+            <div class="dropdown-menu">
+                <a href="/addmissing">Report Missing Person</a>
+                <a href="/listmissing">My Reports</a>
+                <a href="/myscan">My Scans</a>
             </div>
         </div>
-    </nav>
+
+        <!-- CRIMINAL DATABASE MENU -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Criminal Database</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <a href="/searchcriminal">Search Criminal DB</a>
+                <a href="/mycriminalsearches">My Criminal Searches</a>
+            </div>
+        </div>
+
+        <!-- USER DROPDOWN -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
 
     <!-- HERO SECTION -->

@@ -5,9 +5,11 @@ from werkzeug.utils import secure_filename
 import cv2
 import numpy as np
 from datetime import datetime
+import time
 
 
-MATCH_CONSTANT = 70   # lower = stricter match
+MATCH_CONSTANT = 70
+MATCH_CONSTANT2 = 95   # lower = stricter match
 MIN_MATCH_FRAMES = 3
 
 
@@ -539,6 +541,203 @@ def scanresults(scan_id):
     )
 
 
+@app.route("/searchcriminal")
+def searchcriminal():
+    if "user" not in session:
+        return '''
+            <script>
+                alert("Please login first");
+                window.location.href = "/login";
+            </script>
+        '''
+
+    return render_template("searchcriminal.html")
+
+@app.route("/searchcriminalaction", methods=["POST"])
+def searchcriminalaction():
+    if "user" not in session:
+        return '''
+            <script>
+                alert("Please login first");
+                window.location.href = "/login";
+            </script>
+        '''
+
+    search_title = request.form["search_title"]
+    remarks = request.form.get("remarks")
+    photos = request.files.getlist("photos")
+
+    # ===== INSERT SEARCH RECORD =====
+    query = "INSERT INTO criminal_searches (user_id, search_title, remarks) VALUES (%s,%s,%s)"
+    insert_record(query, (session["user"][0], search_title, remarks))
+
+    search_id = select_record("SELECT MAX(id) FROM criminal_searches WHERE user_id=%s", (session["user"][0],))[0]
+
+    # ===== CREATE FOLDER USING SEARCH ID =====
+    folder_path = os.path.join("static/criminal_searches", str(search_id))
+    os.makedirs(folder_path, exist_ok=True)
+
+    # ===== SAVE IMAGES =====
+    count = 1
+    for photo in photos:
+        if photo and photo.filename:
+            ext = photo.filename.rsplit(".", 1)[1]
+            filename = f"{count}.{ext}"
+            photo.save(os.path.join(folder_path, filename))
+            count += 1
+
+    return '''
+        <script>
+            alert("Criminal search submitted successfully");
+            window.location.href = "/mycriminalsearches";
+        </script>
+    '''
+
+
+@app.route("/mycriminalsearches")
+def mycriminalsearches():
+    if "user" not in session:
+        return '''
+            <script>
+                alert("Please login first");
+                window.location.href = "/login";
+            </script>
+        '''
+
+    query = "SELECT id, search_title, remarks, created_on FROM criminal_searches WHERE user_id=%s ORDER BY id DESC"
+    searches = select_records(query, (session["user"][0],))
+
+    return render_template("mycriminalsearches.html", searches=searches)
+
+
+@app.route("/criminalsearchresults/<int:sid>")
+def criminalsearchresults(sid):
+    if "user" not in session:
+        return '''
+            <script>
+                alert("Please login first");
+                window.location.href = "/login";
+            </script>
+        '''
+
+    # ===== FETCH SEARCH DETAILS =====
+    search = select_record("SELECT id, search_title, remarks FROM criminal_searches WHERE id=%s AND user_id=%s", (sid, session["user"][0]))
+    if not search:
+        return '''
+            <script>
+                alert("Invalid request");
+                window.location.href = "/mycriminalsearches";
+            </script>
+        '''
+
+    # ===== LOAD SEARCH IMAGES =====
+    search_folder = os.path.join("static/criminal_searches", str(sid))
+    if not os.path.exists(search_folder):
+        return "Search images not found"
+
+    search_images = []
+    for f in os.listdir(search_folder):
+        if f.lower().endswith((".jpg", ".jpeg", ".png")):
+            search_images.append(os.path.join(search_folder, f))
+
+    if not search_images:
+        return "No valid search images found"
+
+    # ===== LOAD CRIMINAL DATA =====
+    criminals = select_records("SELECT id, full_name, crime_type FROM criminals", ())
+    if not criminals:
+        return "No criminals available in database"
+
+    training_faces = []
+    labels = []
+    label_map = {}
+
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+
+    label_id = 0
+    for c in criminals:
+        criminal_id, name, crime_type = c
+        criminal_folder = os.path.join("static/criminals", str(criminal_id))
+
+        if not os.path.exists(criminal_folder):
+            continue
+
+        label_map[label_id] = {
+            "criminal_id": criminal_id,
+            "name": name,
+            "crime_type": crime_type
+        }
+
+        for img_file in os.listdir(criminal_folder):
+            if not img_file.lower().endswith((".jpg", ".jpeg", ".png")):
+                continue
+
+            img_path = os.path.join(criminal_folder, img_file)
+            img = cv2.imread(img_path)
+            if img is None:
+                continue
+
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, 1.2, 6)
+
+            if len(faces) == 0:
+                continue
+
+            x, y, w, h = faces[0]
+            face = gray[y:y+h, x:x+w]
+            face = cv2.resize(face, (200, 200))
+            face = cv2.equalizeHist(face)
+
+            training_faces.append(face)
+            labels.append(label_id)
+
+        label_id += 1
+
+    if not training_faces:
+        return "No valid criminal face data available"
+
+    # ===== TRAIN MODEL =====
+    recognizer = cv2.face.LBPHFaceRecognizer_create()
+    recognizer.train(training_faces, np.array(labels))
+
+    # ===== RUN SEARCH =====
+    results = {}
+
+    for img_path in search_images:
+        img = cv2.imread(img_path)
+        if img is None:
+            continue
+
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, 1.2, 6)
+
+        for (x, y, w, h) in faces:
+            face = gray[y:y+h, x:x+w]
+            face = cv2.resize(face, (200, 200))
+            face = cv2.equalizeHist(face)
+
+            label, confidence = recognizer.predict(face)
+            print(confidence)
+            if confidence < MATCH_CONSTANT2:
+                criminal = label_map[label]
+                cid = criminal["criminal_id"]
+
+                if cid not in results or confidence < results[cid]["confidence"]:
+                    results[cid] = {
+                        "name": criminal["name"],
+                        "crime_type": criminal["crime_type"],
+                        "confidence": round(confidence, 2)
+                    }
+
+    # ===== SORT RESULTS =====
+    final_results = sorted(results.values(), key=lambda x: x["confidence"])
+
+    print(final_results)
+    return render_template(
+        "criminalsearchresults.html",
+        search=search,
+        results=final_results
+    )
 
 # ================= ADMIN =================
 
@@ -720,6 +919,111 @@ def viewcctv():
     videos = select_records(query, ())
 
     return render_template("viewcctv.html", videos=videos)
+
+
+@app.route("/addcriminal")
+def addcriminal():
+    if "user" not in session:
+        return '''
+            <script>
+                alert("Please login first");
+                window.location.href = "/login";
+            </script>
+        '''
+
+    return render_template("addcriminal.html")
+
+
+@app.route("/addcriminalaction", methods=["POST"])
+def addcriminalaction():
+    if "user" not in session:
+        return '''
+            <script>
+                alert("Please login first");
+                window.location.href = "/login";
+            </script>
+        '''
+
+    # ======== FETCH FORM DATA ========
+    full_name = request.form["full_name"]
+    alias_name = request.form.get("alias_name")
+    age = request.form.get("age")
+    gender = request.form.get("gender")
+    crime_type = request.form.get("crime_type")
+    crime_description = request.form.get("crime_description")
+    identification_mark = request.form.get("identification_mark")
+    last_known_location = request.form.get("last_known_location")
+
+    # ======== INSERT INTO DATABASE ========
+    query = "INSERT INTO criminals (full_name, alias_name, age, gender, crime_type, crime_description, identification_mark, last_known_location) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
+    insert_record(query, (full_name, alias_name, age, gender, crime_type, crime_description, identification_mark, last_known_location))
+
+    criminal_id = select_record("SELECT MAX(id) FROM criminals", ())[0]
+
+    # ======== CREATE IMAGE FOLDER ========
+    save_dir = os.path.join("static/criminals", str(criminal_id))
+    os.makedirs(save_dir, exist_ok=True)
+
+    # ======== LOAD FACE CASCADE ========
+    face_cascade = cv2.CascadeClassifier(
+        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    )
+
+    # ======== START WEBCAM (NO GUI) ========
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        return "Webcam not accessible"
+
+    img_count = 0
+    start_time = time.time()
+
+    while img_count < 50:
+        ret, frame = cap.read()
+        if not ret or frame is None:
+            continue
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+        for (x, y, w, h) in faces:
+            face_img = gray[y:y+h, x:x+w]
+            face_img = cv2.resize(face_img, (200, 200))
+
+            img_count += 1
+            cv2.imwrite(os.path.join(save_dir, f"{img_count}.jpg"), face_img)
+
+            if img_count >= 50:
+                break
+
+        # Safety timeout (15 seconds)
+        if time.time() - start_time > 15:
+            break
+
+    cap.release()
+
+    return '''
+        <script>
+            alert("Criminal record added and face data captured successfully");
+            window.location.href = "/listcriminals";
+        </script>
+    '''
+
+
+@app.route("/listcriminals")
+def listcriminals():
+    if "user" not in session:
+        return '''
+            <script>
+                alert("Please login first");
+                window.location.href = "/login";
+            </script>
+        '''
+
+    query = "SELECT id, full_name, alias_name, crime_type, last_known_location, status, created_on FROM criminals ORDER BY created_on DESC"
+    criminals = select_records(query, ())
+
+    return render_template("listcriminals.html", criminals=criminals)
+
 
 
 if __name__ == "__main__":

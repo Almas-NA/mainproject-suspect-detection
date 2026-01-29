@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Criminal Searches | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">AI Surveillance</div>
+
+    <div class="nav-links">
+        <a href="/userhome">Dashboard</a>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Criminal Database</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/searchcriminal">Search Criminal DB</a>
+                <a href="/mycriminalsearches">My Criminal Searches</a>
+            </div>
+        </div>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="features">
+    <h2>My Criminal Searches</h2>
+
+    {% if searches %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Search Title</th>
+                <th>Remarks</th>
+                <th>Created On</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in searches %}
+            <tr>
+                <td>{{ s[1] }}</td>
+                <td>{{ s[2] or '-' }}</td>
+                <td>{{ s[3] }}</td>
+                <td>
+                    <a href="/criminalsearchresults/{{ s[0] }}" class="btn-primary">
+                        Do Search
+                    </a>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="text-align:center;">No criminal searches found.</p>
+    {% endif %}
+</section>
+
+<footer>
+    <p>© 2026 | AI-Based Surveillance System</p>
+</footer>
+
+</body>
+</html>

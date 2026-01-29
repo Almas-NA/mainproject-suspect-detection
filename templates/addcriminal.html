@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Criminal | Admin | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- ADMIN NAVBAR -->
+<nav class="navbar admin-navbar">
+    <div class="logo">AI Surveillance | Admin</div>
+
+    <div class="nav-links">
+        <a href="/adminhome">Dashboard</a>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Criminal Database</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/addcriminal">Add Criminal</a>
+                <a href="/listcriminals">View Criminals</a>
+            </div>
+        </div>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                     class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/adminprofile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ADD CRIMINAL FORM -->
+<section class="auth-section">
+    <div class="auth-card admin-card">
+
+        <h2>Add Criminal Record</h2>
+        <p class="auth-subtitle">
+            Enter criminal identification details
+        </p>
+
+        <form method="POST" action="/addcriminalaction">
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="full_name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Alias / Nickname</label>
+                <input type="text" name="alias_name">
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" name="age">
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender">
+                        <option value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label>Crime Type</label>
+                <input type="text" name="crime_type" placeholder="Eg: Theft, Trafficking">
+            </div>
+
+            <div class="form-group">
+                <label>Crime Description</label>
+                <textarea name="crime_description" rows="4"
+                    placeholder="Brief description of the criminal activity"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Identification Marks</label>
+                <textarea name="identification_mark" rows="3"
+                    placeholder="Scar, tattoo, birthmark, etc"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Last Known Location</label>
+                <input type="text" name="last_known_location">
+            </div>
+
+            <button type="submit" class="btn-admin btn-full">
+                Save Criminal Record
+            </button>
+
+        </form>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="admin-footer">
+    <p>© 2026 | AI Surveillance System — Admin Panel</p>
+</footer>
+
+</body>
+</html>
