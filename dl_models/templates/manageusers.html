@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Users | Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar admin-navbar">
+    <div class="logo">AI Surveillance | Admin</div>
+
+    <div class="nav-links">
+        <a href="/adminhome">Dashboard</a>
+
+        <!-- CCTV DROPDOWN -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Manage CCTV Inputs</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <a href="/uploadcctv">Add Footage</a>
+                <a href="/viewcctv">View Uploads</a>
+            </div>
+        </div>
+
+        <!-- ADMIN USER DROPDOWN -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                     class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <a href="/adminprofile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<!-- CONTENT -->
+<section class="features">
+    <h2>Registered Users</h2>
+
+    <div style="overflow-x:auto;">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ u[0] }}</td>
+                    <td>{{ u[1] }}</td>
+                    <td>{{ u[2] }}</td>
+                    <td>
+                        {% if u[3] == 1 %}
+                            Active
+                        {% else %}
+                            Inactive
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if u[3] == 1 %}
+                        <a href="/removeuser/{{ u[0] }}"
+                           onclick="return confirm('Are you sure you want to deactivate this user?')"
+                           class="btn-admin-small">
+                           Remove
+                        </a>
+                        {% else %}
+                        ---
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<footer class="admin-footer">
+    <p>© 2026 | AI Surveillance System — Admin Panel</p>
+</footer>
+
+</body>
+</html>

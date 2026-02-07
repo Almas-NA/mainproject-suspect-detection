@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Upload CCTV Footage | Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar admin-navbar">
+    <div class="logo">AI Surveillance | Admin</div>
+
+    <div class="nav-links">
+        <a href="/adminhome">Dashboard</a>
+
+        <!-- CCTV DROPDOWN -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Manage CCTV Inputs</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <a href="/uploadcctv">Add Footage</a>
+                <a href="/viewcctv">View Uploads</a>
+            </div>
+        </div>
+
+        <!-- ADMIN USER DROPDOWN -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+                     class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+
+            <div class="dropdown-menu">
+                <a href="/adminprofile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+    <section class="auth-section">
+        <div class="auth-card">
+            <h2>Upload CCTV Footage</h2>
+
+            <form method="POST" action="/uploadcctvaction" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label>CCTV ID</label>
+                    <input type="text" name="cctv_id" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Video ID</label>
+                    <input type="text" name="video_id" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="location" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Recording Date</label>
+                    <input type="date" name="video_date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Video</label>
+                    <input type="file" name="video" accept="video/*" required>
+                </div>
+
+                <button type="submit" class="btn-admin btn-full">
+                    Upload CCTV Video
+                </button>
+
+            </form>
+
+        </div>
+    </section>
+
+</body>
+
+</html>

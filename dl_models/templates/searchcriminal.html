@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Criminal Database | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- USER NAVBAR -->
+<nav class="navbar">
+    <div class="logo">AI Surveillance</div>
+
+    <div class="nav-links">
+        <a href="/userhome">Dashboard</a>
+
+        <!-- MISSING PERSON MENU -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Missing Persons</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/addmissing">Report Missing Person</a>
+                <a href="/listmissing">My Reports</a>
+                <a href="/myscan">My Scans</a>
+            </div>
+        </div>
+
+        <!-- CRIMINAL DATABASE MENU -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Criminal Database</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/searchcriminal">Search Criminal DB</a>
+                <a href="/mycriminalsearches">My Criminal Searches</a>
+            </div>
+        </div>
+
+        <!-- USER DROPDOWN -->
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- SEARCH FORM -->
+<section class="auth-section">
+    <div class="auth-card">
+
+        <h2>Search Criminal Database</h2>
+        <p class="auth-subtitle">
+            Upload a photo and provide reference details for this search
+        </p>
+
+        <form method="POST" action="/searchcriminalaction" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>Search Title / Reference</label>
+                <input type="text" name="search_title" placeholder="Eg: Bus Stand CCTV Suspect" required>
+            </div>
+
+            <div class="form-group">
+                <label>Remarks / Notes (Optional)</label>
+                <textarea name="remarks" rows="3" placeholder="Any additional details"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Upload Image</label>
+                <input type="file" name="photos" accept="image/*" multiple required>
+            </div>
+
+            <button type="submit" class="btn-primary btn-full">
+                🔍 Search Now
+            </button>
+
+        </form>
+
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 | AI-Based Surveillance System</p>
+</footer>
+
+</body>
+</html>
+
+
+

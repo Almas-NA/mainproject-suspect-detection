@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Criminal Search Results | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">AI Surveillance</div>
+
+    <div class="nav-links">
+        <a href="/mycriminalsearches">Back to Searches</a>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="features">
+
+    <!-- SEARCH INFO -->
+    <div class="info-card" style="max-width:900px;margin:30px auto;">
+        <h2 style="text-align:center;">Criminal Search Results</h2>
+
+        <div class="info-row">
+            <span>Search Title</span>
+            <strong>{{ search[1] }}</strong>
+        </div>
+
+        <div class="info-row">
+            <span>Remarks</span>
+            <strong>{{ search[2] or '—' }}</strong>
+        </div>
+    </div>
+
+    <!-- RESULTS -->
+    {% if results %}
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Criminal Name</th>
+                <th>Crime Type</th>
+                <th>Match Confidence</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in results %}
+            <tr>
+                <td>{{ r.name }}</td>
+                <td>{{ r.crime_type }}</td>
+                <td>
+                    {{ r.confidence }}%
+                </td>
+                <td>
+                    {% if r.confidence < 50 %}
+                        <span style="color:#0a7f2e;font-weight:bold;">High Match</span>
+                    {% elif r.confidence < 70 %}
+                        <span style="color:#c97a00;font-weight:bold;">Possible Match</span>
+                    {% else %}
+                        <span style="color:#b30000;font-weight:bold;">Low Confidence</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p style="text-align:center;margin-top:40px;color:#777;">
+            No criminal matches found for the uploaded image(s).
+        </p>
+    {% endif %}
+
+</section>
+
+<footer>
+    <p>© 2026 | AI-Based Surveillance System</p>
+</footer>
+
+</body>
+</html>

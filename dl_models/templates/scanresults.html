@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan Results | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">AI Surveillance</div>
+    <div class="nav-links">
+        <a href="/myscan">My Scans</a>
+        <a href="/userhome">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<!-- CONTENT -->
+<section class="auth-section">
+    <div class="list-wrapper">
+
+        <h2 class="list-title">Scan Results</h2>
+
+        <!-- SCAN SUMMARY -->
+        <div class="scan-summary">
+            <p><strong>Missing Person:</strong> {{ person_name }}</p>
+            <p><strong>Scan Date:</strong> {{ scanned_on }}</p>
+            <p><strong>Total Matches:</strong> {{ total_matches }}</p>
+        </div>
+
+        {% if matches %}
+        <div class="match-grid">
+
+            {% for m in matches %}
+            <div class="match-card">
+
+                <!-- MATCH IMAGE -->
+                <img src="/static/matches/{{ run_folder }}/{{ m[2] }}"
+                     alt="Detected Face">
+
+                <!-- MATCH DETAILS -->
+                <div class="match-info">
+                    <p><strong>Confidence:</strong> {{ m[1] }}</p>
+                    <p><strong>Frame No:</strong> {{ m[0] }}</p>
+                    <p><strong>Video File:</strong> {{ m[3] }}</p>
+                    <p><strong>CCTV Location:</strong> {{ m[4] }}</p>
+                    <p><strong>Video Date:</strong> {{ m[5] }}</p>
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+        {% else %}
+        <p class="no-data">No matches found for this scan.</p>
+        {% endif %}
+
+    </div>
+</section>
+
+</body>
+</html>

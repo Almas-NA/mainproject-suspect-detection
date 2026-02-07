@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Scan History | AI Surveillance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">AI Surveillance</div>
+
+    <div class="nav-links">
+        <a href="/userhome">Dashboard</a>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <span>Missing Persons</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/addmissing">Report Missing Person</a>
+                <a href="/listmissing">My Reports</a>
+            </div>
+        </div>
+
+        <a href="/myscan">My Scans</a>
+
+        <div class="user-dropdown">
+            <div class="user-trigger">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="user-icon">
+                <span>{{ session["user"][1] }}</span>
+            </div>
+            <div class="dropdown-menu">
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENT -->
+<section class="auth-section">
+    <div class="list-wrapper">
+
+        <h2 class="list-title">My Scan History</h2>
+
+        {% if scans %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Missing Person</th>
+                    <th>Scan Date</th>
+                    <th>Total Matches</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in scans %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ s[1] }}</td>
+                    <td>{{ s[4] }}</td>
+                    <td>{{ s[3] }}</td>
+                    <td>
+                        <a href="/scanresults/{{ s[0] }}" class="btn-view">
+                            View Results
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="no-data">No scan history available.</p>
+        {% endif %}
+
+    </div>
+</section>
+
+</body>
+</html>
